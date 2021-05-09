@@ -22,8 +22,8 @@ namespace Movies.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var Movies = await _context.Genre.ToListAsync();
-
+            //var Movies = await _context.Genre.ToListAsync();
+            var Movies = await _context.Genres.ToListAsync();
             return View(Movies);
         }
 
@@ -62,8 +62,8 @@ namespace Movies.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Genre.FindAsync(id);
-
+           // var product = await _context.Genre.FindAsync(id);
+            var product = await _context.Genres.FindAsync(id);
             if (product == null)
             {
                 return NotFound();
@@ -84,7 +84,8 @@ namespace Movies.Controllers
                 return NotFound();
             }
 
-            var Movies = await _context.Genre.FindAsync(id);
+           // var Movies = await _context.Genre.FindAsync(id);
+              var Movies = await _context.Genres.FindAsync(id);
 
             if (Movies == null)
             {
@@ -134,8 +135,8 @@ namespace Movies.Controllers
                 return NotFound();
             }
 
-            var Genres = await _context.Genre.FirstOrDefaultAsync(m => m.GenreId == id);
-
+            //var Genres = await _context.Genre.FirstOrDefaultAsync(m => m.GenreId == id);
+            var Genres = await _context.Genres.FirstOrDefaultAsync(m => m.GenreId == id);
             if (Genres == null)
             {
                 return NotFound();
@@ -149,9 +150,10 @@ namespace Movies.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var Genres = await _context.Genre.FindAsync(id);
-
-            _context.Genre.Remove(Genres);
+           // var Genres = await _context.Genre.FindAsync(id);
+            var Genres = await _context.Genres.FindAsync(id);
+            //_context.Genre.Remove(Genres);
+             _context.Genres.Remove(Genres);
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
@@ -159,7 +161,8 @@ namespace Movies.Controllers
 
         private bool ProductsExists(long id)
         {
-            return _context.Genre.Any(e => e.GenreId == id);
+            //return _context.Genre.Any(e => e.GenreId == id);
+            return _context.Genres.Any(e => e.GenreId == id);
         }
 
 

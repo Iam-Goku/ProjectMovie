@@ -23,47 +23,27 @@ namespace Movies.Controllers
         //GET: Products
         public async Task<IActionResult> Index()
         {
-
-            var course = _context.Movies;
-        //    var course =  _context.Movies
-        //.Include(c => c.Genres)
-        //.AsNoTracking();
-        //    if (course == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-            //return View(course);
-
-            // var movies = _context.Movies;                   
-            //CODE OF ONE TWO MANY RELATION
-            //  var Movies = _context.Movies;
-            //.Include(mg => mg.Genres)
-            //.ThenInclude(g => g.Movies);
+     
+            var course = _context.Movies
+           .Include(c => c.Genres)
+           .AsNoTracking();
+           
             return View(await course.ToListAsync());
 
 
         }
 
 
-        //var movies =  _context.Movies
-        //      .Include(mg => mg.await movies.ToListAsync()Genres)
-        //          .ThenInclude(g => g.Movies);
-
-        //    if (movies == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View();
-
+     
      
 
         // GET: Products/Create
         public IActionResult Create()
-        {         
+        {
+
+
             //used to get a table as check box from another table which have a foreign key
-            ViewBag.GenreId = new MultiSelectList(_context.Genre.ToList(), "GenreId", "Name");//the soure of dropdownlist
+            ViewBag.GenreId = new MultiSelectList(_context.Genres.ToList(), "GenreId", "Name");
             return View();
         }
 
@@ -72,19 +52,30 @@ namespace Movies.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title,Description,Storyline,Year,ReleaseDate,Runtime,MovieType")] Movie movies)
+       public async Task<IActionResult> Create([Bind("Title,Description,Storyline,Year,ReleaseDate,Runtime,MovieType,GenreId")] Movie movie)
         {
            
 
             if (ModelState.IsValid)
             {
-                _context.Add(movies);
+               
+                var body = Request.Form["GenreId"];
+                foreach (var g in body.ToList())
+                {
+                    var gen = _context.Genres.First(x => x.GenreId == int.Parse(g));
+                    movie.Genres.Add(gen);
+                }
+
+                _context.Movies.Add(movie);
+
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-      
-            ViewBag.GenreId = new MultiSelectList(_context.Genre.ToList(), "GenreId", "Name"); //For Genre as a Checkbox list
-            return View(movies);
+
+            ViewBag.GenreId = new MultiSelectList(_context.Genres.ToList(), "GenreId", "Name"); //For Genre as a Checkbox list
+            return View(movie);
+           
             
         }
 
@@ -162,7 +153,8 @@ namespace Movies.Controllers
                         throw;
                     }
                 }
-                ViewBag.GenreId = new SelectList(_context.Genre, "GenreId", "Name");//the soure of dropdownlist
+               // ViewBag.GenreId = new SelectList(_context.Genre, "GenreId", "Name");//the soure of dropdownlist
+                ViewBag.GenreId = new SelectList(_context.Genres, "GenreId", "Name");//the soure of dropdownlist
 
                 return RedirectToAction(nameof(Index));
             }
@@ -179,6 +171,7 @@ namespace Movies.Controllers
             }
 
             var products = await _context.Movies.FirstOrDefaultAsync(m => m.MovieId == id);
+        
 
             if (products == null)
             {
@@ -194,8 +187,9 @@ namespace Movies.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var product = await _context.Movies.FindAsync(id);
-
+           
             _context.Movies.Remove(product);
+           
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));

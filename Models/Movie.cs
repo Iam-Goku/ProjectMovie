@@ -11,6 +11,10 @@ namespace Movies.Models
 
     public partial class Movie
     {
+        public Movie()
+        {
+            this.Genres = new List<Genre>();
+        }
         public int MovieId { get; set; }
         [Required]
         public string Title { get; set; }
@@ -25,11 +29,10 @@ namespace Movies.Models
         [Display(Name = "Movie Type")]
         [Column(TypeName = "nvarchar(20)")]
         public MovieType MovieType { get; set; }
-
-       
+   
         public ICollection<Genre> Genres { get; set; }
-        //public List<MovieGenre> MovieGenres { get; set; }
-
+   
+       public List<MovieGenre> MovieGenres { get; set; }
 
 
 

@@ -79,15 +79,17 @@
             <td>
                 @*@Html.DisplayFor(modelItem => item.Genres)*@
 
-           @*@foreach (var Genre in item.MovieGenres)
+                @*@foreach (var GenreId in item.MovieGenres)
         {
-            @Genre.GenreId <br />
-        }*@   
+            @GenreId <br />
+        }*@
 
-                @*@foreach(var Genre in(MultiSelectList)ViewBag.GenreId)
+                @foreach (var GenreId in item.Genres)
                 {
-                    @Genre.Selected;
-                }<br />*@
+                    @GenreId.Name<br/>
+                }
+
+
 
             </td>
 

@@ -53,12 +53,11 @@
                 <label class="control-label">Movie Genre</label>
                 <div class="col-md-10">
                     <div class="checkbox">
-
-                     
-                        @foreach (var item in (MultiSelectList)ViewBag.GenreId)
-                        {
+                      
+            @foreach (var item in (MultiSelectList)ViewBag.GenreId)
+                         {
                             <input type="checkbox" value="@item.Value" id="GenreId" name="GenreId" />@item.Text
-                        }
+                         }
 
                     </div>
                 </div>

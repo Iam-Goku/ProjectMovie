@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace Movies.Models
 {
+     [Table("Genre")]
     public class Genre
     {
+      
         [Key]
         public int GenreId { get; set; }
         //[Column(TypeName="nvarchar(20)")]
@@ -19,7 +21,8 @@ namespace Movies.Models
 
 
         public ICollection<Movie> Movies { get; set; }
-       //public List<MovieGenre> MovieGenres { get; set; }
+       
+        public List<MovieGenre> MovieGenres { get; set; }
 
 
 
